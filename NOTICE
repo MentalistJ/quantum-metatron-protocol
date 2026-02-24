@@ -1,0 +1,86 @@
+# NOTICE — Prior Art and Intellectual Property
+
+## QuantumStack Ecosystem
+
+This protocol is part of the **QuantumStack** ecosystem:
+
+```
+QuantumStack
+  ├── QuantumNFT       — NFT identity contract (Solidity)
+  ├── QuantumHash      — Dynamic + temporal key contract (Solidity)
+  ├── QuantumShield    — Anomaly detection contract (Solidity)
+  ├── QuantumSnap      — Forward-secrecy SSE authentication (Python)
+  ├── QuantumMetatron  — Multi-LLM semantic split protocol (Python) ← this repo
+  └── AGEN             — Sovereign AI platform built on top (private)
+```
+
+Publisher: Paulo Jonathan Oliveira (MentalistJ)  
+Contact: oliveirapaulojonathan@gmail.com  
+Repository: https://github.com/MentalistJ/quantum-metatron-protocol
+
+---
+
+### Description of Invention
+
+The QuantumMetatron protocol introduces a novel method for protecting
+user privacy when interacting with large language model (LLM) services:
+
+1. **QuantumMetatron (q_metatron.py)**
+   Session-scoped HMAC token substitution table where each word in a
+   user message is replaced by a deterministic but unrecognisable token
+   derived from the session key. The LLM receives obfuscation instructions
+   and must decode tokens before responding. Response integrity is verified
+   via a session-scoped ACK marker.
+
+2. **MetatronSplitter (q_metatron_splitter.py)**
+   Round-robin distribution of semantic tokens across N independent LLM
+   providers, such that no single provider receives more than 1/N of the
+   original message content. Providers run in parallel (asyncio), and
+   responses are assembled locally. An optional local LLM (Ollama) acts
+   as assembler, synthesising partial responses without having seen the
+   original query.
+
+### Novelty
+
+As of 2026-02-24, no published academic paper, patent, or commercial
+product implements the combination of:
+  - Session-scoped HMAC token tables for LLM prompt obfuscation
+  - Multi-provider semantic split for distributed privacy
+  - Local LLM-based response assembly
+  - Integration with cryptographic session chains (QuantumSnap)
+
+### Prior Art Timestamp
+
+This NOTICE file and the git commit history of this repository serve
+as documented prior art, establishing the invention date of 2026-02-24.
+
+The git commit signed by the author at this date constitutes legally
+recognised evidence of invention.
+
+---
+
+## QuantumSnap Protocol
+
+**Protocol:** QuantumSnap — Forward-Secrecy SSE Authentication
+**Author:** Paulo Jonathan Oliveira (MentalistJ)
+**Date:** 2026 (see git history)
+
+HMAC-SHA256 forward-chain per SSE packet, NFT-identity-based session
+bootstrapping, O(1) memory server-side verification, and heartbeat-based
+revocation cascade. Combined with on-chain NFT identity (QuantumNFT,
+QuantumHash, QuantumShield contracts on Sepolia testnet).
+
+---
+
+## Third-Party Licenses
+
+This project uses the following open-source libraries:
+
+| Library     | License    | Purpose                    |
+|-------------|------------|----------------------------|
+| openai      | MIT        | LLM API clients            |
+| anthropic   | MIT        | Anthropic API client       |
+| fastapi     | MIT        | REST API framework         |
+| web3        | MIT        | Ethereum interaction       |
+| cryptography| Apache 2.0 | Cryptographic primitives   |
+| python-dotenv | BSD 3   | Environment configuration  |

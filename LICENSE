@@ -1,0 +1,52 @@
+                    GNU AFFERO GENERAL PUBLIC LICENSE
+                       Version 3, 19 November 2007
+
+ Copyright (C) 2026 Jonathan Paulo de  Oliveira (MentalistJ)
+ <oliveirapaulojonathan@gmail.com>
+
+ Part of the QuantumStack ecosystem — https://github.com/MentalistJ
+ Components: QuantumMetatron | QuantumSnap | AGEN AI Platform
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+---
+
+DUAL LICENSE
+
+This project is dual-licensed:
+
+  • GNU Affero General Public License v3.0 (AGPLv3)
+  • Commercial License (for proprietary and SaaS deployments)
+
+If you comply with AGPLv3 terms, you may use, modify,
+and distribute this software under AGPLv3.
+
+If you intend to use this software in a proprietary,
+closed-source, or commercial SaaS product without
+complying with AGPLv3 obligations, you must obtain
+a separate commercial license.
+
+For commercial licensing inquiries:
+  oliveirapaulojonathan@gmail.com
+
+ACADEMIC / RESEARCH USE:
+  Freely permitted with attribution. Cite as:
+    MentalistJ. "QuantumMetatron: Multi-LLM Semantic Split Protocol
+    for Distributed Privacy." QuantumStack Project, 2026.
+    https://github.com/MentalistJ/quantum-metatron-protocol
+
+---
+
+For the full AGPL v3 license text, see:
+  https://www.gnu.org/licenses/agpl-3.0.html
