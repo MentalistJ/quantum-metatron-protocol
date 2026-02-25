@@ -37,7 +37,7 @@ import time
 from typing import List, Dict, Optional
 from dataclasses import dataclass, field
 
-from core.security.q_metatron import get_metatron
+from q_metatron import get_metatron
 
 
 # ─────────────────────────────────────────────────────────────────────────────
