@@ -20,16 +20,22 @@ Even with HTTPS, the AI company's servers process your plaintext query.
 
 ## The Solution
 
-QuantumMetatron distributes your message across **N independent LLM providers** simultaneously. Each provider receives only a fraction of the tokens — never the complete message.
+QuantumMetatron now features a **Semantic Splitter** that uses a lightning-fast local or cheap LLM (like DeepSeek) to decompose your message into small, obfuscated semantic fragments. It then distributes these fragments across **N independent LLM providers** simultaneously. 
 
-```
+```text
 Original: "How do I recover my crypto wallet password securely?"
 
-DeepSeek receives:  "How _ _ my _ wallet _ securely?"         ← no "password", no "crypto"
-OpenAI receives:    "_ do I _ crypto _ password _ ?"          ← no "recover", no "wallet"
-Anthropic receives: "_ _ _ recover _ _ _ securely ?"          ← no "password", no "wallet"
+[Phase 1: Semantic Decompose]
+Fragment 1: "Recovering crypto securely"
+Fragment 2: "Wallet password protection"
 
-Assembly happens locally — no provider sees the full query.
+[Phase 2: HMAC Obfuscation & Parallel Dispatch]
+DeepSeek receives:  "⟨Y7X1⟩ crypto securely"
+OpenAI receives:    "Wallet ⟨Z9Q2⟩ protection"
+Anthropic receives: (another fragment...)
+
+[Phase 3: Assembly]
+Assembler intelligently joins perspectives locally. No provider saw the full query.
 ```
 
 ## Key Properties
@@ -61,19 +67,21 @@ pip install openai anthropic python-dotenv
 ```
 
 ```python
-from q_metatron_splitter import MetatronSplitter
+from q_metatron_splitter_semantic import MetatronSplitterSemantic
 from openai import AsyncOpenAI
-
-splitter = MetatronSplitter(
-    session_key="your-session-key",
-    providers=["deepseek", "openai", "anthropic"]
-)
 
 clients = {
     "deepseek":  AsyncOpenAI(api_key="...", base_url="https://api.deepseek.com/v1"),
     "openai":    AsyncOpenAI(api_key="..."),
     "anthropic": AsyncOpenAI(api_key="...", base_url="https://api.anthropic.com/v1"),
 }
+
+splitter = MetatronSplitterSemantic(
+    session_key="your-session-key",
+    providers=["deepseek", "openai", "anthropic"],
+    decompose_client=clients["deepseek"]  # Required for Semantic Decompose
+)
+
 
 result = await splitter.split_and_query(
     message="Your sensitive query here",
@@ -86,8 +94,9 @@ print(result.assembled)
 
 | File | Purpose |
 |---|---|
-| `q_metatron.py` | Session-scoped HMAC token obfuscation + ACK verification |
-| `q_metatron_splitter.py` | Multi-provider round-robin split + parallel async query |
+| `q_metatron.py` | Core. Session-scoped HMAC obfuscation + integrity checks |
+| `q_metatron_splitter.py` | Original. Round-robin split (word-level), 0 latency overhead. |
+| `q_metatron_splitter_semantic.py` | **Evolved.** Advanced Semantic Splitter using LLM for intelligent parallel query routing and local context assembly. |
 
 ## QuantumMetatron (obfuscation only)
 
@@ -133,7 +142,7 @@ See [NOTICE](NOTICE) for prior art documentation.
 
 ```bibtex
 @software{quantummetatron2026,
-  author  = {Oliveira, Paulo Jonathan},
+  author  = {De Oliveira, Paulo Jonathan},
   title   = {QuantumMetatron: Multi-LLM Semantic Split Protocol for Distributed Privacy},
   year    = {2026},
   url     = {https://github.com/MentalistJ/quantum-metatron-protocol},
