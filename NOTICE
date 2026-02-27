@@ -11,6 +11,7 @@ QuantumStack
   ├── QuantumShield    — Anomaly detection contract (Solidity)
   ├── QuantumSnap      — Forward-secrecy SSE authentication (Python)
   ├── QuantumMetatron  — Multi-LLM semantic split protocol (Python) ← this repo
+  ├── QuantumDance     — Rotating cloud assembler + guard (Python) ← this repo
   └── AGEN             — Sovereign AI platform built on top (private)
 ```
 
@@ -40,22 +41,42 @@ user privacy when interacting with large language model (LLM) services:
    as assembler, synthesising partial responses without having seen the
    original query.
 
+3. **MetatronSplitterSemantic (q_metatron_splitter_semantic.py)**
+   Uses a lightweight local/cheap LLM (e.g. DeepSeek) to semantically
+   decompose the user message into independent conceptual fragments, which
+   are then HMAC-obfuscated and dispatched in parallel across N cloud
+   providers. The assembler synthesises responses locally.
+
+4. **QuantumDanceAssembler (q_quantum_dance.py)**  
+   Rotating cloud assembler layer that operates after the split. Instead of
+   always using the same provider to synthesise partial responses, it selects
+   a cloud assembler pseudo-randomly per call, with a configurable non-repeat
+   window derived from the session key. An optional local guard (Ollama)
+   must return PASS_TOKEN before the assembled response is accepted; if it
+   returns REWORK_TOKEN, a local fallback assembler is tried. The assembler
+   never receives the original query — only the partial responses.
+
 ### Novelty
 
-As of 2026-02-24, no published academic paper, patent, or commercial
-product implements the combination of:
+As of 2026-02-24 (MetatronSplitter) / 2026-02-27 (QuantumDance), no published
+academic paper, patent, or commercial product implements the combination of:
   - Session-scoped HMAC token tables for LLM prompt obfuscation
   - Multi-provider semantic split for distributed privacy
-  - Local LLM-based response assembly
+  - Rotating cloud assembler with per-session non-repeat window
+  - Local LLM guard with PASS_TOKEN / REWORK_TOKEN protocol
   - Integration with cryptographic session chains (QuantumSnap)
 
-### Prior Art Timestamp
+### Prior Art Timestamps
 
-This NOTICE file and the git commit history of this repository serve
-as documented prior art, establishing the invention date of 2026-02-24.
+- **2026-02-24** — QuantumMetatron, MetatronSplitter, MetatronSplitterSemantic  
+  (git commit signed by the author on this date constitutes legally recognised evidence of invention)
+- **2026-02-27** — QuantumDance Assembler (`q_quantum_dance.py`)  
+  (rotating cloud assembler with session-scoped non-repeat window + local guard protocol)
+- **2026-02-27** — 4-provider resilience validation (`lab_quantum_dance.py`)  
+  (DeepSeek + OpenAI + Anthropic + Gemini; confirmed pipeline survives provider failure)
 
-The git commit signed by the author at this date constitutes legally
-recognised evidence of invention.
+This NOTICE file and the signed git commit history of this repository serve
+as documented prior art for all inventions listed above.
 
 ---
 
@@ -84,3 +105,4 @@ This project uses the following open-source libraries:
 | web3        | MIT        | Ethereum interaction       |
 | cryptography| Apache 2.0 | Cryptographic primitives   |
 | python-dotenv | BSD 3   | Environment configuration  |
+| httpx         | BSD 3   | Async HTTP (guard + local) |
